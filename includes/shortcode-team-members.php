@@ -22,24 +22,6 @@ function get_team_member_priority($roles, $staff_role) {
     }
 }
 
-/**
- * Truncate the bio to a specified number of words.
- *
- * @param string $bio The full bio text.
- * @param int $word_limit The number of words to limit the text to.
- * @return string The truncated bio with "Read More" link.
- */
-function truncate_bio($bio, $word_limit = 50) {
-    // $words = explode(' ', $bio);
-    // if (count($words) <= $word_limit) {
-    //     return $bio;
-    // }
-
-    // $truncated = implode(' ', array_slice($words, 0, $word_limit));
-    // return $truncated . '<span class="more-text" style="display:none;">' . implode(' ', array_slice($words, $word_limit)) . '</span><br><a href="#" class="read-more-link"> Read More</a>';
-    return $bio;
-}
-
 
 /**
  * Shortcode handler to display team members based on role.
@@ -120,11 +102,22 @@ function display_team_members_by_role($role_type) {
 
         // Output the members
         ob_start();
-        $list_class = ($role_type === 'elder') ? 'team-members-list elders' : 'team-members-list grid';
+        // Assign CSS class based on role type
+        switch ($role_type) {
+            case 'elder':
+            $list_class = 'team-members-list elders';
+            break;
+            case 'staff':
+            $list_class = 'team-members-list staff';
+            break;
+            case 'team_leader':
+            $list_class = 'team-members-list team';
+            break;
+        }
         echo '<div class="' . esc_attr($list_class) . '">';
         foreach ($team_members as $member) {
             $displayed_members[] = $member['post_id'];
-            echo '<div class="card">';
+            echo '<div class="kcg-card team-member-card">';
             if ($member['photo']) {
                 echo '<img src="' . esc_url($member['photo']) . '" alt="' . esc_attr($member['title']) . '"/>';
             }
@@ -132,7 +125,7 @@ function display_team_members_by_role($role_type) {
             echo '<h3>' . esc_html($member['title']) . '</h3>';
             echo '<h5>' . esc_html($member['roles']) . '</h5>'; // Display roles
             if ($member['bio']) {
-                echo '<p class="bio">' . truncate_bio($member['bio']) . '</p>';
+                echo '<p class="bio">' . esc_html($member['bio']) . '</p>';
             }
             if ($member['email']) {
                 // Generate a button for the email link
@@ -194,24 +187,28 @@ function get_team_member_role_labels($roles, $staff_role, $ministries) {
     return implode(' and ', $roles_output);
 }
 
-// Shortcodes for different roles
-function display_elders_shortcode() {
-    return display_team_members_by_role('elder');
+/**
+ * Shortcode handler to display team members based on role.
+ *
+ * @param array $atts Shortcode attributes.
+ * @return string The HTML output of the team members.
+ */
+function display_team_members_shortcode($atts) {
+    $role = isset($atts['role']) ? $atts['role'] : '';
+    return display_team_members_by_role($role);
 }
 
-function display_staff_shortcode() {
-    return display_team_members_by_role('staff');
-}
-
-function display_ministry_leaders_shortcode() {
-    return display_team_members_by_role('team_leader');
-}
-
-// Register the shortcodes
 function register_team_members_shortcodes() {
-    add_shortcode('elders_list', 'display_elders_shortcode');
-    add_shortcode('staff_list', 'display_staff_shortcode');
-    add_shortcode('ministry_leaders_list', 'display_ministry_leaders_shortcode');
+    $roles = [
+        'elders_list' => 'elder',
+        'staff_list' => 'staff',
+        'ministry_leaders_list' => 'team_leader'
+    ];
+    foreach ($roles as $shortcode => $role) {
+        add_shortcode($shortcode, function() use ($role) {
+            return display_team_members_by_role($role);
+        });
+    }
 }
 add_action('init', 'register_team_members_shortcodes');
 ?>

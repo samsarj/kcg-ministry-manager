@@ -2,8 +2,13 @@
 /**
  * Plugin Name: Ministry Manager
  * Description: Manage church ministries, leaders, and staff.
- * Version: 1.0
+ * Version: 1.1.0
  * Author: Sam Sarjudeen
+ * Author URI: https://github.com/samsarj
+ * Plugin URI: https://github.com/samsarj/kcg-ministry-manager
+ * Github Plugin URI: https://github.com/samsarj/kcg-ministry-manager
+ * Primary Branch: main
+ * Text Domain: kcg-ministry-manager
  */
 
 // Exit if accessed directly

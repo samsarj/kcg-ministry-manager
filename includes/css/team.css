@@ -1,82 +1,110 @@
-/* Global Styles for All Cards */
-.card {
-    box-sizing: border-box;
-    background-color: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s;
-    flex-direction: column;
-    align-items: center;
-    display: flex;
-    text-align: center;
-    /* gap: 20px; */
-}
+/* ==================================================
+   TEAM MEMBERS LIST - BASE STYLES
+   ================================================== */
 
-.card img {
-    max-width: 200px;
-    height: auto;
-    object-fit: cover;
-    /* Ensure the image fits well within the card */
-    border-radius: 10px;
-}
-
-.card h3 {
-    margin-bottom: 0;
-}
-
-.card h5,
-.card p {
-    margin-bottom: 10px;
-}
-
+/* Base container for all team member lists */
 .team-members-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
-}
-
-/* Grid layout for other team members */
-.team-members-list.grid {
-    display: flex;
-    flex-wrap: wrap;
     justify-content: center;
+    gap: 1rem;
 }
 
-.team-members-list.grid .card {
-    flex: 1 1 360px;
-    max-width: 360px;
-    gap: 10px;
+/* ==================================================
+   TEAM MEMBER CARD - GLOBAL STYLES
+   ================================================== */
+
+/* Default card styling - applies to all team member cards */
+.kcg-card.team-member-card {
+    flex-direction: column;        /* Stack content vertically by default */
+    justify-content: start;        /* Align content to top */
+    text-align: center;           /* Center text alignment */
+    gap: 0.5rem;                  /* Space between card elements */
 }
 
-.team-members-list.elders .card {
-    flex-direction: row;
-    text-align: justify;
-    gap: 20px;
+/* Card content wrapper */
+.team-member-card .card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;                  /* Consistent spacing between content items */
 }
 
-@media (max-width: 768px) {
-    .team-members-list.elders .card {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .team-members-list.elders .wp-block-button {
-        justify-content: center;
-        width: 100%;
-    }
-}
-
-.bio {
+/* Reset margins and padding for content elements (except buttons) */
+.team-member-card .card-content>*:not(.wp-block-button) {
     margin: 0;
+    padding: 0;
 }
 
-.team-members-list .wp-block-button {
-    display: flex;
+/* Team member images - responsive with rounded corners */
+.team-member-card img {
+    max-width: 100%;
+    max-height: 100%;
+    height: auto;
+    object-fit: cover;            /* Maintain aspect ratio while filling container */
+    border-radius: 0.5rem;        /* Rounded corners for modern look */
 }
 
-.team-members-list.grid .wp-block-button {
-    justify-content: center;
-    width: 100%;
+/* ==================================================
+   ELDERS & STAFF - SPECIAL LAYOUT
+   ================================================== */
+
+/* Special horizontal layout for elders and staff members */
+.team-members-list.elders .team-member-card,
+.team-members-list.staff .team-member-card {
+    min-height: 240px;            /* Ensure consistent card height */
+    max-height: 100%;
+    flex-direction: row;          /* Horizontal layout (image + content side by side) */
+    text-align: start;            /* Left-align text for better readability */
+    gap: 1rem;                    /* Space between image and content */
+}
+
+/* Image sizing for elders and staff - larger, more prominent */
+.team-members-list.elders .team-member-card img,
+.team-members-list.staff .team-member-card img {
+    max-height: 240px;            /* Fixed height for consistency */
+    max-width: 50%;               /* Limit width to leave space for content */
+}
+
+/* Staff-specific grid sizing */
+.team-members-list.staff .team-member-card {
+    flex-direction: row;          /* Maintain horizontal layout */
+    flex: 1 1 calc(50% - 1rem);   /* Two cards per row with gap consideration */
+    min-width: 160px;             /* Prevent cards from becoming too narrow */
+}
+
+/* ==================================================
+   MOBILE RESPONSIVE STYLES
+   ================================================== */
+
+/* Mobile breakpoint: Switch to vertical layout on smaller screens */
+@media (max-width: 936px) {
+    /* Revert elders and staff to vertical layout on mobile */
+    .team-members-list.elders .team-member-card,
+    .team-members-list.staff .team-member-card {
+        flex-direction: column;   /* Stack image above content */
+        text-align: center;       /* Center-align for mobile */
+    }
+
+    /* Staff cards mobile adjustments */
+    .team-members-list.staff .team-member-card {
+        flex-direction: column;   /* Vertical layout */
+        max-width: 320px;         /* Limit maximum width */
+        min-width: 140px;         /* Prevent cards from being too narrow */
+    }
+
+    /* Full-width images on mobile for staff */
+    .team-members-list.staff .team-member-card img {
+        max-width: 100%;          /* Allow full width on mobile */
+    }
+}
+
+/* ==================================================
+   GENERAL TEAM MEMBERS - GRID LAYOUT
+   ================================================== */
+
+/* Regular team member cards - compact grid layout */
+.team-members-list.team .team-member-card {
+    flex: 1 1 calc(50% - 10px);   /* Two cards per row with 10px gap */
+    max-width: 240px;             /* Maximum card width */
+    min-width: 100px;             /* Minimum width to prevent squishing */
 }
