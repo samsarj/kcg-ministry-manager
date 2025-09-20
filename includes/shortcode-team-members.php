@@ -3,6 +3,8 @@
 global $displayed_members;
 $displayed_members = [];
 
+
+
 /**
  * Function to determine the priority of the team member.
  *
@@ -55,7 +57,7 @@ function display_team_members_by_role($role_type) {
 
             $team_roles = get_field('team_roles', $post_id);
             $staff_role = get_field('staff_role', $post_id);
-            $ministries = get_field('ministry', $post_id);
+            $ministries = mm_get_ministries_for_team_member($post_id);
 
             // Determine if this member should be displayed in the current shortcode
             $display_in_current_shortcode = false;
@@ -83,7 +85,7 @@ function display_team_members_by_role($role_type) {
                 $team_members[] = [
                     'post_id' => $post_id,
                     'priority' => get_team_member_priority($team_roles, $staff_role),
-                    'title' => get_the_title(),
+                    'title' => get_the_title($post_id),
                     'photo' => get_field('team_photo', $post_id) ?: plugin_dir_url(__FILE__) . 'images/placeholder.jpg', // Path to your placeholder image
                     'bio' => get_field('team_bio', $post_id),
                     'email' => get_field('team_email', $post_id),
@@ -91,6 +93,7 @@ function display_team_members_by_role($role_type) {
                 ];
             }
         }
+        wp_reset_postdata();
 
         // Sort team members based on priority and then alphabetically
         usort($team_members, function($a, $b) {
