@@ -102,9 +102,22 @@
    GENERAL TEAM MEMBERS - GRID LAYOUT
    ================================================== */
 
-/* Regular team member cards - compact grid layout */
+/* Regular team member cards - responsive grid layout with fixed widths */
 .team-members-list.team .team-member-card {
-    flex: 1 1 calc(50% - 10px);   /* Two cards per row with 10px gap */
-    max-width: 240px;             /* Maximum card width */
-    min-width: 100px;             /* Minimum width to prevent squishing */
+    flex: 0 0 auto;               /* Don't grow or shrink, use natural size */
+    width: calc(50% - 1rem);      /* 2 cards per row on small screens */
+}
+
+/* Medium screens: 3 cards per row */
+@media (min-width: 768px) {
+    .team-members-list.team .team-member-card {
+        width: calc(33.333% - 1rem);
+    }
+}
+
+/* Large screens: 4 cards per row */
+@media (min-width: 1024px) {
+    .team-members-list.team .team-member-card {
+        width: calc(25% - 1rem);
+    }
 }
